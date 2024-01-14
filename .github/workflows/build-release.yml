@@ -12,7 +12,6 @@ jobs:
     defaults:
       run:
         shell: bash
-        working-directory: /home/runner
     strategy:
       fail-fast: false
       matrix:
@@ -40,7 +39,7 @@ jobs:
 
     - name: Set release env
       run: |
-        echo WORKDIR="/home/runner" >> "$GITHUB_ENV"
+        echo WORKDIR="/builder" >> "$GITHUB_ENV"
         if [[ ${{ matrix.model }} == "nanopi-r5s" ]]; then
           echo "release_kmod=true" >> "$GITHUB_ENV"
         fi
@@ -78,6 +77,7 @@ jobs:
     - name: Compile OpenWrt
       id: compile
       continue-on-error: true
+      working-directory: /builder
       run: |
         USE_GLIBC=y BUILD_FAST=y ENABLE_BPF=y bash <(curl -sS ${{ secrets.script_url_general }}) ${{ matrix.tag.type }} ${{ matrix.model }}
         cd openwrt
@@ -86,11 +86,13 @@ jobs:
 
     - name: Extensive logs after a failed compilation
       if: steps.compile.outcome == 'failure'
+      working-directory: /builder
       run: |
         cd openwrt
         make V=s
 
     - name: Prepare Firmware Files
+      working-directory: /builder
       run: |
         mkdir -p rom info
         if [ "${{ matrix.model }}" = "nanopi-r4s" ]; then
