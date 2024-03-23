@@ -3,6 +3,8 @@ name: Build releases
 on:
   watch:
     types: started
+  repository_dispatch:
+    types: build
 
 jobs:
   build:
@@ -136,7 +138,7 @@ jobs:
         fi
 
     - name: Create release
-      uses: ncipollo/release-action@v1.11.1
+      uses: ncipollo/release-action@v1
       with:
         name: OpenWrt-${{ env.latest_release }}
         allowUpdates: true
