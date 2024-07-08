@@ -105,9 +105,9 @@ jobs:
       run: |
         export PATH="/opt/clang/bin:$PATH"
         mkdir /opt/clang
-        wget -q https://github.com/sbwml/redhat-llvm-project/releases/download/18.1.7/clang-18.1.7-x86_64-redhat-linux.tar.xz
-        sudo tar --strip-components=1 -C /opt/clang -xf clang-18.1.7-x86_64-redhat-linux.tar.xz
-        rm -rf clang-18.1.7-x86_64-redhat-linux.tar.xz
+        wget -q https://github.com/sbwml/redhat-llvm-project/releases/download/18.1.8/clang-18.1.8-x86_64-redhat-linux.tar.xz
+        sudo tar --strip-components=1 -C /opt/clang -xf clang-18.1.8-x86_64-redhat-linux.tar.xz
+        rm -rf clang-18.1.8-x86_64-redhat-linux.tar.xz
         clang --version
 
     - name: Compile OpenWrt
@@ -116,7 +116,7 @@ jobs:
       working-directory: /builder
       run: |
         export PATH="/opt/clang/bin:$PATH"
-        export USE_GLIBC=y BUILD_FAST=y KERNEL_CLANG_LTO=y ENABLE_BPF=y ENABLE_LRNG=y USE_GCC15=y ENABLE_LTO=y USE_MOLD=y
+        export ENABLE_GLIBC=y BUILD_FAST=y KERNEL_CLANG_LTO=y ENABLE_BPF=y ENABLE_LRNG=y USE_GCC15=y ENABLE_LTO=y ENABLE_MOLD=y
         bash <(curl -sS ${{ secrets.script_url_general }}) ${{ matrix.tag.type }} ${{ matrix.model }}
         cd openwrt
         tags=$(git describe --abbrev=0 --tags)
