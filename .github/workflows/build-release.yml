@@ -51,7 +51,7 @@ jobs:
       uses: sbwml/actions@openwrt-build-setup
 
     - name: Install LLVM
-      uses: sbwml/actions@install-llvm
+      uses: sbwml/actions@install-llvm-19
 
     - name: Compile OpenWrt
       id: compile
